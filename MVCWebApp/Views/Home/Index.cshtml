@@ -1,0 +1,80 @@
+﻿@using AzureStorageLibrary.Models
+@model Product
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Add Or Update Product</h2>
+
+<form class="form-inline" asp-action="@(ViewBag.IsUpdate ? "Update" : "Create")" method="post" enctype="application/x-www-form-urlencoded">
+    <input  class="form-control mr-1" asp-for="Name" placeholder="Enter Name"/>
+    <input  class="form-control mr-1" asp-for="Price" placeholder="Enter Price"/>
+    <input  class="form-control mr-1" asp-for="Stock" placeholder="Enter Stock"/>
+    <input  class="form-control mr-1" asp-for="Color" placeholder="Enter Color"/>
+
+    <input type="hidden" asp-for="RowKey"/>
+    <input type="hidden" asp-for="PartitionKey"/>
+    <input type="hidden" asp-for="ETag"/>
+
+    <input class="btn btn-primary" type="submit" value="@(ViewBag.IsUpdate ? "Update Product":"Add new Product")" />
+</form>
+
+
+<h1>Products</h1>
+
+<form class="form-inline" method="get" asp-action="Query">
+    <input type="number" name="filterPrice" />
+    <input type="submit" class="btn btn-dark" value="Query" />
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>RowKey</th>
+        <th>PartitionKey</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Color</th>
+        <th>TimeStamp</th>
+        <th>Actions</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in ViewBag.products as List<Product>)
+    {
+        <tr>
+            <td>
+                @item.RowKey
+            </td>
+            <td>
+                @item.PartitionKey
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Price
+            </td>
+            <td>
+                @item.Stock
+            </td>
+            <td>
+                @item.Color
+            </td>
+            <td>
+                @item.Timestamp
+            </td>
+            <td>
+                <a class="btn btn-danger" asp-action="Update" asp-controller="Home"
+                asp-route-rowKey="@item.RowKey" asp-route-partitionKey="@item.PartitionKey"
+                >Update</a>
+            </td>
+
+            <td>
+                <a class="btn btn-danger" asp-action="Delete" asp-controller="Home"
+                   asp-route-rowKey="@item.RowKey" asp-route-partitionKey="@item.PartitionKey">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

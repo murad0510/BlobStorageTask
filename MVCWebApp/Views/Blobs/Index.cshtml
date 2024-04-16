@@ -1,0 +1,74 @@
+﻿
+<h2>
+    Save Picture
+</h2>
+
+<form asp-action="Upload" method="post" asp-controller="Blobs" enctype="multipart/form-data">
+    <input type="file" name="picture" />
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+
+<h2>
+    Save Pdf
+</h2>
+
+<form asp-action="UploadPdf" method="post" asp-controller="Blobs" enctype="multipart/form-data">
+    <input type="file" name="pdf" />
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+
+<h2>
+    Pictures
+</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <td>Picture</td>
+        <td>Name</td>
+        <td>Actions</td>
+    </tr>
+
+    @foreach (var item in ViewBag.blobs as List<FileBlob>)
+    {
+        <tr>
+            <td>
+                <img src="@item.Url" class="img-thumbnail" style="width:100px;" />
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <a class="btn btn-warning" asp-action="Download" asp-route-filename="@item.Name">Download</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-filename="@item.Name">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+
+<table class="table table-bordered">
+    <tr>
+        <td>Name</td>
+        <td>Actions</td>
+    </tr>
+
+    @foreach (var item in ViewBag.blobsPdf as List<FileBlob>)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <button onclick="ShowPdf('@item.Url')">Show</button>
+            </td>
+        </tr>
+    }
+</table>
+
+<iframe id="showPdf" style="width:200px;height:400px"></iframe>
+
+<script>
+    function ShowPdf(pdfUrl) {
+        var element = document.getElementById("showPdf");
+        element.src = pdfUrl;
+    }
+</script>
